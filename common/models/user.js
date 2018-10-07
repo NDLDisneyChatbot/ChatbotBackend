@@ -101,6 +101,7 @@ module.exports = function(User) {
                                     });
                                   });
                             }
+                            // It returns the weather alarm for the next one week, but currently shows the first alarm
                             else if (['week'].some(function(v) { return message.indexOf(v) >= 0; })) {
                                 request({
                                     method: 'GET',
@@ -108,7 +109,7 @@ module.exports = function(User) {
                                   }, function(err, res, body) {
                                       body = JSON.parse(body);
                                     cb(null, {
-                                        responseMessage: body[0].Alarms[0].AlarmType + ' on ' + new Date(body[0].date).getDate() + new Date(body[0].date).getDate() 
+                                        responseMessage: body[0].Alarms[0].AlarmType + ' on ' + new Date(body[0].Date).toDateString() 
                                     });
                                   });
                             }
