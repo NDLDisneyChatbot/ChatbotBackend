@@ -1,8 +1,12 @@
 {
-    "suggestions": {
-        "name": "suggestions",
-        "connector": "loopback-component-storage",
-        "provider": "filesystem",
-        "root": "./server/suggestions"
-      }
-}
+    "mongo": {
+      "host": "localhost",
+      "port": 27017,
+      "url": "",
+      "database": "chatbot",
+      "password": "",
+      "name": "mongo",
+      "user": "",
+      "connector": "mongodb"
+    }
+  }
