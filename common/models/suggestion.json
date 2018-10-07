@@ -1,11 +1,14 @@
 {
-  "name": "help",
+  "name": "suggestion",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "disaster": "string",
+    "suggestion": "string"
+  },
   "validations": [],
   "relations": {},
   "acls": [],

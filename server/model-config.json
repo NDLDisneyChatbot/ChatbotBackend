@@ -17,8 +17,8 @@
     "dataSource": null,
     "public": true
   },
-  "help": {
-    "dataSource": null,
-    "public": true
+  "suggestion": {
+    "dataSource": "suggestions",
+    "public": false
   }
 }
