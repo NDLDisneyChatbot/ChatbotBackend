@@ -102,8 +102,9 @@ module.exports = function(User) {
                                   });
                             }
                             // It returns the weather alarm for the next one week, but currently shows the first alarm
-                            else if (['week'].some(function(v) { return message.indexOf(v) >= 0; })) {
-                                request({
+                            // else if (['week'].some(function(v) { return message.indexOf(v) >= 0; })) {
+                              else {
+                              request({
                                     method: 'GET',
                                     url: accuweather.baseUrl + '/alarms/v1/10day/' + locationKey + '?apikey=' + accuweather.key,
                                   }, function(err, res, body) {
@@ -116,6 +117,9 @@ module.exports = function(User) {
                             break;
                     
                         default:
+                          cb(null, {
+                            responseMessage: 'We will get back to you'
+                          });
                             break;
                     }
                 }
