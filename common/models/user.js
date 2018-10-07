@@ -10,16 +10,8 @@ const client = new language.LanguageServiceClient({
     keyFilename: 'chatbot-64ab86bc6794.json'
 });
 
-// The text to analyze
-const text = 'how is the weather on October 6th';
-
-const document = {
-  content: text,
-  type: 'PLAIN_TEXT',
-};
-
 var accuweather = {
-  baseUrl: 'http://dataservice.accuweather.com/locations/v1',
+  baseUrl: 'http://dataservice.accuweather.com',
   key: 'HackPSU2018',
 };
 
@@ -60,28 +52,89 @@ module.exports = function(User) {
         }
       );
 
-  User.getLocationKey = function(locationKey, cb) {
-    request({
-      method: 'GET',
-      url: 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=HackPSU2018&q=' + lat + '%2C' + lng,
-    }, function(err, res, body) {
-      body = JSON.parse(body);
-      cb(null, {
-        locationKey: body.Key,
-      });
-    });
+  User.chatMessage = function(locationKey, message, cb) {
+      // The text to analyze;
+      const document = {
+        content: message,
+        type: 'PLAIN_TEXT',
+        };
+    client
+        .analyzeEntities({document: document})
+        .then(results => {
+            const entities = results[0].entities;
+            entities.forEach(entity => {
+                if(entity.name) {
+                    console.log(entity.name);
+                    switch (entity.name) {
+                        case 'weather':
+
+                            if (['today'].some(function(v) { return message.indexOf(v) >= 0; })) {
+                                request({
+                                    method: 'GET',
+                                    url: accuweather.baseUrl + '/currentconditions/v1/' + locationKey + '?apikey=' + accuweather.key,
+                                  }, function(err, res, body) {
+                                      body = JSON.parse(body);
+                                    cb(null, {
+                                        responseMessage: 'Weather is ' + body[0].WeatherText + ' with a temperature of ' + body[0].Temperature.Metric.Value + '°' + body[0].Temperature.Metric.Unit 
+                                    });
+                                  });
+                            }
+                            else if (['now'].some(function(v) { return message.indexOf(v) >= 0; })) {
+                                request({
+                                    method: 'GET',
+                                    url: accuweather.baseUrl + '/currentconditions/v1/' + locationKey + '?apikey=' + accuweather.key,
+                                  }, function(err, res, body) {
+                                      body = JSON.parse(body);
+                                    cb(null, {
+                                        responseMessage: 'Weather is ' + body[0].WeatherText + ' with a temperature of ' + body[0].Temperature.Metric.Value + '°' + body[0].Temperature.Metric.Unit 
+                                    });
+                                  });
+                            }
+                            else if (['tomorrow'].some(function(v) { return message.indexOf(v) >= 0; })) {
+                                request({
+                                    method: 'GET',
+                                    url: accuweather.baseUrl + '/currentconditions/v1/' + locationKey + '?apikey=' + accuweather.key,
+                                  }, function(err, res, body) {
+                                      body = JSON.parse(body);
+                                    cb(null, {
+                                        responseMessage: 'Weather is ' + body[0].WeatherText + ' with a temperature of ' + body[0].Temperature.Metric.Value + '°' + body[0].Temperature.Metric.Unit 
+                                    });
+                                  });
+                            }
+                            else if (['week'].some(function(v) { return message.indexOf(v) >= 0; })) {
+                                request({
+                                    method: 'GET',
+                                    url: accuweather.baseUrl + '/alarms/v1/10day/' + locationKey + '?apikey=' + accuweather.key,
+                                  }, function(err, res, body) {
+                                      body = JSON.parse(body);
+                                    cb(null, {
+                                        responseMessage: body[0].Alarms[0].AlarmType + ' on ' + new Date(body[0].date).getDate() + new Date(body[0].date).getDate() 
+                                    });
+                                  });
+                            }
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                }
+            });
+  })
+  .catch(err => {
+    console.error('ERROR:', err);
+  });
   };
 
   User.remoteMethod(
-            'getLocationKey', {
+            'chatMessage', {
               accepts: [{
-                arg: 'lat',
+                arg: 'locationKey',
                 type: 'number',
                 required: true,
               },
               {
-                arg: 'lng',
-                type: 'number',
+                arg: 'message',
+                type: 'string',
                 required: true,
               }],
               returns: {
@@ -90,7 +143,7 @@ module.exports = function(User) {
                 root: true,
               },
               http: {
-                path: '/getLocationKey',
+                path: '/chatMessage',
                 verb: 'get',
               },
             }

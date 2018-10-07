@@ -14,11 +14,11 @@
     ]
   },
   "user": {
-    "dataSource": null,
+    "dataSource": "mongo",
     "public": true
   },
   "help": {
-    "dataSource": null,
+    "dataSource": "mongo",
     "public": true
   }
 }

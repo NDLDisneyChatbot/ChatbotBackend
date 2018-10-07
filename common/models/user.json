@@ -1,11 +1,22 @@
 {
   "name": "user",
-  "base": "User",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "mobileNumber": {
+      "type": "number"
+    },
+    "location": {
+      "type": "geopoint"
+    }
+  },
   "validations": [],
   "relations": {},
   "acls": [],
