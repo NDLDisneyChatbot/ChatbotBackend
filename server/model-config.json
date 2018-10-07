@@ -16,5 +16,9 @@
   "user": {
     "dataSource": null,
     "public": true
+  },
+  "help": {
+    "dataSource": null,
+    "public": true
   }
 }

@@ -18,22 +18,6 @@ const document = {
   type: 'PLAIN_TEXT',
 };
 
-// Detects the sentiment of the text
-client
-  //.analyzeSentiment({document: document})
-  .analyzeEntities({document: document})
-  .then(results => {
-    console.log(JSON.stringify(results));
-    // const sentiment = results[0].documentSentiment;
-
-    // console.log(`Text: ${text}`);
-    // console.log(`Sentiment score: ${sentiment.score}`);
-    // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
-  })
-  .catch(err => {
-    console.error('ERROR:', err);
-  });
-
 var accuweather = {
   baseUrl: 'http://dataservice.accuweather.com/locations/v1',
   key: 'HackPSU2018',
