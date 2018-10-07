@@ -3,6 +3,6 @@
         "name": "suggestions",
         "connector": "loopback-component-storage",
         "provider": "filesystem",
-        "root": "./server/suggestions.txt"
+        "root": "./server/suggestions"
       }
 }
